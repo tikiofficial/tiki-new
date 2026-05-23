@@ -1050,7 +1050,12 @@ function hideAllPanels(){
   _hide('reserve');_hide('qBody');_hide('qFoot');
   _hide('loading');_hide('result');_hide('thanks');
 }
+function _killTimer(){
+  if(_loadTimer){clearTimeout(_loadTimer);_loadTimer=null;}
+  if(_loadIv){clearInterval(_loadIv);_loadIv=null;}
+}
 function openReserve(){
+  _killTimer();
   document.getElementById('modal').classList.add('show');
   document.body.style.overflow='hidden';
   hideAllPanels();
@@ -1058,6 +1063,7 @@ function openReserve(){
   _show('reserve');
 }
 function openDemo(){
+  _killTimer();
   document.getElementById('modal').classList.add('show');
   document.body.style.overflow='hidden';
   hideAllPanels();
