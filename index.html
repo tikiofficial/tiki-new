@@ -1170,7 +1170,7 @@ function getVerdict(s){
   return '아직 초기 단계예요. 부담 없는 대화로 접점을 쌓아가는 것부터 시작해보세요.';
 }
 function showResult(){
-  _hide('loading');
+  hideAllPanels();
   _show('result');
   const target=calcScore();
   setTimeout(()=>{
