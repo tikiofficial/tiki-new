@@ -360,9 +360,13 @@
   .load-sub{font-size:13px;color:var(--text-faint);margin-top:9px;}
 
   .result{display:none;}
-  .result.show{display:flex;flex-direction:column;flex:1;overflow:hidden;animation:fadeUp .6s ease;}
+  .result.show{display:flex;flex-direction:column;flex:1;overflow:hidden;animation:fadeUp .6s ease;position:relative;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
   .result-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .scroll-hint{position:absolute;bottom:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;padding:12px 0 20px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.97) 36%);pointer-events:none;z-index:10;transition:opacity .35s;}
+  .sh-txt{font-size:11.5px;color:#bbb;letter-spacing:.04em;margin-bottom:7px;}
+  .sh-arrow{width:18px;height:18px;border-right:2px solid #c8c8d8;border-bottom:2px solid #c8c8d8;transform:rotate(45deg);animation:shBounce 1.25s ease-in-out infinite;}
+  @keyframes shBounce{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(5px);}}
   .r-topbar{display:flex;align-items:center;justify-content:space-between;
     padding:14px 18px;border-bottom:1px solid var(--line);background:#fff;flex-shrink:0;}
   .r-topbar-title{font-size:13.5px;font-weight:700;color:var(--text);}
@@ -957,7 +961,11 @@
         <div class="r-topbar-title">TIKI 관계 분석 리포트</div>
         <button class="r-close" onclick="closeModal()">✕</button>
       </div>
-      <div class="result-scroll">
+      <div class="scroll-hint" id="scrollHint">
+        <span class="sh-txt">아래로 스크롤</span>
+        <div class="sh-arrow"></div>
+      </div>
+      <div class="result-scroll" id="resultScroll">
         <div class="r-head">
           <div class="done">● 분석 완료</div>
           <h3>TIKI 관계 분석 리포트</h3>
@@ -1180,7 +1188,17 @@ function showResult(){
     let n=0;const ci=setInterval(()=>{n++;
       document.getElementById('scoreNum').textContent=n;
       if(n>=target)clearInterval(ci);},22);
-  },300);}
+  },300);
+  setTimeout(()=>{
+    var sc=document.getElementById('resultScroll');
+    var hint=document.getElementById('scrollHint');
+    if(sc&&hint){
+      hint.style.opacity='1';
+      function onScroll(){if(sc.scrollTop>24){hint.style.opacity='0';sc.removeEventListener('scroll',onScroll);}}
+      sc.addEventListener('scroll',onScroll);
+    }
+  },700);
+}
 /* ── 구글시트 웹훅 ── */
 const WEBHOOK='https://script.google.com/macros/s/AKfycbz87UrydTqAt9SJ9FVghF6nl2HESCFTkrG9ZbpoqbJ7ep_1mdW75rq9k-ZNY8Ci3UFTbg/exec';
 
